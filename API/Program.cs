@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,15 +23,17 @@ namespace API
             using (var scop = host.Services.CreateScope())
             {
                 var services = scop.ServiceProvider;
-                try 
+                try
                 {
                     var context = services.GetRequiredService<DataContext>();
+                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
                     context.Database.Migrate();
+                    Seed.SeedData(context, userManager).Wait();
                 }
                 catch (System.Exception exc)
                 {
                     var logger = services.GetRequiredService<ILogger<Program>>();
-                    logger.LogError(exc, "An error occured during migration");                    
+                    logger.LogError(exc, "An error occured during migration");
                 }
             }
 
@@ -38,9 +42,6 @@ namespace API
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }
 }
