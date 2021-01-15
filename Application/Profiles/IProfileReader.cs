@@ -1,7 +1,9 @@
-﻿namespace Application.Profiles
+﻿using System.Threading.Tasks;
+
+namespace Application.Profiles
 {
-    public class IProfileReader
+    public interface IProfileReader
     {
-        
+        Task<Profile> ReadProfile(string username);
     }
 }

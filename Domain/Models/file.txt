@@ -1,0 +1,5 @@
+﻿AppUser - Followings - [kuzatish, kuzatmoq]
+AppUser - Followers - [kuzatuvchilar]
+
+UserFollowing - Observer [kuzatmoq]
+UserFollowing - Target [nishon]
